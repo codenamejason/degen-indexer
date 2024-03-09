@@ -1,0 +1,461 @@
+export default [
+  {
+    type: "constructor",
+    inputs: [
+      { name: "_riskPoolAddress", type: "address", internalType: "address" },
+      { name: "_reservePoolAddress", type: "address", internalType: "address" },
+      { name: "_phroTokenAddress", type: "address", internalType: "address" },
+      { name: "_admin", type: "address", internalType: "address" },
+    ],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "DEFAULT_ADMIN_ROLE",
+    inputs: [],
+    outputs: [{ name: "", type: "bytes32", internalType: "bytes32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "areCBAllowanceAndBalanceBigEnough",
+    inputs: [
+      { name: "token", type: "address", internalType: "address" },
+      { name: "requiredAllowance", type: "uint256", internalType: "uint256" },
+      { name: "coverBuyer", type: "address", internalType: "address" },
+    ],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "discoverPharoCover",
+    inputs: [{ name: "_pharoCover", type: "address", internalType: "address" }],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "distributeCoverToCoverBuyer",
+    inputs: [
+      { name: "pharoId", type: "uint256", internalType: "uint256" },
+      { name: "buyer", type: "address", internalType: "address payable" },
+      { name: "amount", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [{ name: "success", type: "bool", internalType: "bool" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "executeCBFinancials",
+    inputs: [
+      { name: "pharoId", type: "uint256", internalType: "uint256" },
+      { name: "token", type: "address", internalType: "address" },
+      { name: "stakeAmount", type: "uint256", internalType: "uint256" },
+      { name: "coverBuyer", type: "address", internalType: "address" },
+    ],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "executeLPFinancials",
+    inputs: [
+      { name: "providerAddress", type: "address", internalType: "address" },
+      { name: "stakeAmount", type: "uint256", internalType: "uint256" },
+      { name: "asset", type: "address", internalType: "address" },
+      { name: "pharoId", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "getRoleAdmin",
+    inputs: [{ name: "role", type: "bytes32", internalType: "bytes32" }],
+    outputs: [{ name: "", type: "bytes32", internalType: "bytes32" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "grantRole",
+    inputs: [
+      { name: "role", type: "bytes32", internalType: "bytes32" },
+      { name: "account", type: "address", internalType: "address" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "hasRole",
+    inputs: [
+      { name: "role", type: "bytes32", internalType: "bytes32" },
+      { name: "account", type: "address", internalType: "address" },
+    ],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "payProvider",
+    inputs: [
+      { name: "_amount", type: "uint256", internalType: "uint256" },
+      { name: "_provider", type: "address", internalType: "address" },
+      { name: "_asset", type: "address", internalType: "address" },
+    ],
+    outputs: [{ name: "success", type: "bool", internalType: "bool" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "pharoPhee",
+    inputs: [],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "phroToken",
+    inputs: [],
+    outputs: [
+      { name: "", type: "address", internalType: "contract IPHROToken" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "removeLiquidityFromPharo",
+    inputs: [
+      { name: "pharoId", type: "uint256", internalType: "uint256" },
+      { name: "provider", type: "address", internalType: "address payable" },
+      { name: "amount", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "renounceRole",
+    inputs: [
+      { name: "role", type: "bytes32", internalType: "bytes32" },
+      { name: "callerConfirmation", type: "address", internalType: "address" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "reservePool",
+    inputs: [],
+    outputs: [
+      { name: "", type: "address", internalType: "contract IReservePool" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "reservePoolAddress",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "revokeRole",
+    inputs: [
+      { name: "role", type: "bytes32", internalType: "bytes32" },
+      { name: "account", type: "address", internalType: "address" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "riskPool",
+    inputs: [],
+    outputs: [
+      { name: "", type: "address", internalType: "contract IRiskPool" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "riskPoolAddress",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "supportsInterface",
+    inputs: [{ name: "interfaceId", type: "bytes4", internalType: "bytes4" }],
+    outputs: [{ name: "", type: "bool", internalType: "bool" }],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "treasuryAddress",
+    inputs: [],
+    outputs: [{ name: "", type: "address", internalType: "address" }],
+    stateMutability: "view",
+  },
+  {
+    type: "event",
+    name: "LiquidityAdded",
+    inputs: [
+      {
+        name: "pharo_id",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "provider",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "LiquidityRemoved",
+    inputs: [
+      {
+        name: "pharo_id",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "provider",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "MarketMakerPaid",
+    inputs: [
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "marketMaker",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "MarketRebalanceRequired",
+    inputs: [
+      {
+        name: "pharoId",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "reason",
+        type: "string",
+        indexed: false,
+        internalType: "string",
+      },
+    ],
+    anonymous: false,
+  },
+  { type: "event", name: "PayoutsComplete", inputs: [], anonymous: false },
+  {
+    type: "event",
+    name: "ReservePoolDeposit",
+    inputs: [
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      { name: "from", type: "address", indexed: true, internalType: "address" },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "ReservePoolWithdraw",
+    inputs: [
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      { name: "from", type: "address", indexed: true, internalType: "address" },
+      { name: "memo", type: "string", indexed: false, internalType: "string" },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RiskPoolApproved",
+    inputs: [
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      {
+        name: "pharo_id",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RiskPoolDeposit",
+    inputs: [
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      { name: "from", type: "address", indexed: true, internalType: "address" },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RoleAdminChanged",
+    inputs: [
+      { name: "role", type: "bytes32", indexed: true, internalType: "bytes32" },
+      {
+        name: "previousAdminRole",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+      {
+        name: "newAdminRole",
+        type: "bytes32",
+        indexed: true,
+        internalType: "bytes32",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RoleGranted",
+    inputs: [
+      { name: "role", type: "bytes32", indexed: true, internalType: "bytes32" },
+      {
+        name: "account",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "RoleRevoked",
+    inputs: [
+      { name: "role", type: "bytes32", indexed: true, internalType: "bytes32" },
+      {
+        name: "account",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+      {
+        name: "sender",
+        type: "address",
+        indexed: true,
+        internalType: "address",
+      },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "TreasuryDeposit",
+    inputs: [
+      {
+        name: "amount",
+        type: "uint256",
+        indexed: false,
+        internalType: "uint256",
+      },
+      { name: "from", type: "address", indexed: true, internalType: "address" },
+      {
+        name: "reason",
+        type: "string",
+        indexed: false,
+        internalType: "string",
+      },
+    ],
+    anonymous: false,
+  },
+  { type: "error", name: "AccessControlBadConfirmation", inputs: [] },
+  {
+    type: "error",
+    name: "AccessControlUnauthorizedAccount",
+    inputs: [
+      { name: "account", type: "address", internalType: "address" },
+      { name: "neededRole", type: "bytes32", internalType: "bytes32" },
+    ],
+  },
+  {
+    type: "error",
+    name: "PRBMath_MulDiv18_Overflow",
+    inputs: [
+      { name: "x", type: "uint256", internalType: "uint256" },
+      { name: "y", type: "uint256", internalType: "uint256" },
+    ],
+  },
+  {
+    type: "error",
+    name: "PRBMath_MulDiv_Overflow",
+    inputs: [
+      { name: "x", type: "uint256", internalType: "uint256" },
+      { name: "y", type: "uint256", internalType: "uint256" },
+      { name: "denominator", type: "uint256", internalType: "uint256" },
+    ],
+  },
+  { type: "error", name: "WrongRole", inputs: [] },
+];
