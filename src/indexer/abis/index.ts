@@ -1,4 +1,4 @@
-import PharoToken from "../abis/pharo/PharoToken";
+import PharoToken from "../abis/pharo/PharoToken.js";
 
 const abis = {
   "PharoV2/PharoToken": PharoToken,

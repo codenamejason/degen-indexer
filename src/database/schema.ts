@@ -1,5 +1,5 @@
 import { Generated, Insertable, Selectable, Updateable } from "kysely";
-import { Address, ChainId, User } from "../types";
+import { Address, ChainId, User } from "../types.js";
 
 export type UserTable = User & {
   created_at: Date;
