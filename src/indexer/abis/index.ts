@@ -2,7 +2,7 @@ import PharoToken from "../abis/pharo/PharoToken.js";
 
 const abis = {
   "PharoV2/PharoToken": PharoToken,
-};
+} as const;
 
 export default abis;
 export type ContractName = keyof typeof abis;

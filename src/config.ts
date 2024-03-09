@@ -8,7 +8,7 @@ import abis from "./indexer/abis/index.js";
 import { Hex } from "./types.js";
 
 type ChainId = number;
-type CoingeckoSupportedChainId = 1 | 10 | 250 | 42161 | 43114;
+type CoingeckoSupportedChainId = 1 | 421614;
 
 const CHAIN_DATA_VERSION = "33";
 
@@ -41,153 +41,19 @@ const rpcUrl = z.string().url();
 
 const CHAINS: Chain[] = [
   {
-    id: 1,
-    name: "mainnet",
+    id: 421614,
+    name: "arbitrum-sepolia",
     rpc: rpcUrl
-      .default("https://mainnet.infura.io/v3/")
-      .parse(process.env.MAINNET_RPC_URL),
-    pricesFromTimestamp: Date.UTC(2022, 11, 1, 0, 0, 0),
-    tokens: [
-      {
-        code: "USDC",
-        address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-        decimals: 6,
-        priceSource: {
-          chainId: 1,
-          address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-        },
-      },
-      {
-        code: "DAI",
-        address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-        decimals: 18,
-        priceSource: {
-          chainId: 1,
-          address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-        },
-      },
-      {
-        code: "ETH",
-        address: "0x0000000000000000000000000000000000000000",
-        decimals: 18,
-        priceSource: {
-          chainId: 1,
-          address: "0x0000000000000000000000000000000000000000",
-        },
-      },
-    ],
-    subscriptions: [
-      {
-        contractName: "PharoV2/PharoToken",
-        address: "0x966136116a13fa8aCBf3d3F5f1E212667d85b749",
-      },
-    ],
-  },
-  {
-    id: 10,
-    name: "optimism",
-    rpc: rpcUrl
-      .default("https://opt-mainnet.g.alchemy.com/v2/")
-      .parse(process.env.OPTIMISM_RPC_URL),
-    pricesFromTimestamp: Date.UTC(2022, 11, 1, 0, 0, 0),
-    tokens: [
-      {
-        code: "USDC",
-        address: "0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
-        decimals: 6,
-        priceSource: {
-          chainId: 10,
-          address: "0x7F5c764cBc14f9669B88837ca1490cCa17c31607",
-        },
-      },
-      {
-        code: "DAI",
-        address: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
-        decimals: 18,
-        priceSource: {
-          chainId: 10,
-          address: "0xDA10009cBd5D07dd0CeCc66161FC93D7c9000da1",
-        },
-      },
-      {
-        code: "ETH",
-        address: "0x0000000000000000000000000000000000000000",
-        decimals: 18,
-        priceSource: {
-          chainId: 10,
-          address: "0x0000000000000000000000000000000000000000",
-        },
-      },
-    ],
-    subscriptions: [],
-  },
-  {
-    id: 11155111,
-    name: "sepolia",
-    rpc: rpcUrl
-      .default("https://ethereum-sepolia.publicnode.com")
-      .parse(process.env.SEPOLIA_RPC_URL),
-    pricesFromTimestamp: Date.UTC(2023, 11, 1, 0, 0, 0),
-    tokens: [
-      {
-        code: "DAI",
-        address: "0x8db0F9eE54753B91ec1d81Bf68074Be82ED30fEb",
-        decimals: 18,
-        priceSource: {
-          chainId: 1,
-          address: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-        },
-      },
-      {
-        code: "ETH",
-        address: "0x0000000000000000000000000000000000000000",
-        decimals: 18,
-        priceSource: {
-          chainId: 1,
-          address: "0x0000000000000000000000000000000000000000",
-        },
-      },
-    ],
-    subscriptions: [
-      {
-        address: "0x966136116a13fa8aCBf3d3F5f1E212667d85b749",
-        contractName: "PharoV2/PharoToken",
-        fromBlock: 4738892,
-      },
-    ],
-  },
-  {
-    id: 42161,
-    name: "arbitrum",
-    rpc: rpcUrl
-      .default("https://arb-mainnet.g.alchemy.com/v2/")
-      .parse(process.env.ARBITRUM_RPC_URL),
+      .default("https://arb-sepolia.g.alchemy.com/v2/")
+      .parse(process.env.ARBITRUM_SEPOLIA_RPC_URL),
     pricesFromTimestamp: Date.UTC(2023, 7, 1, 0, 0, 0),
     tokens: [
       {
-        code: "USDC",
-        address: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-        decimals: 6,
-        priceSource: {
-          chainId: 42161,
-          address: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-        },
-      },
-      {
-        code: "ARB",
-        address: "0x912ce59144191c1204e64559fe8253a0e49e6548",
-        decimals: 18,
-        priceSource: {
-          chainId: 42161,
-          address: "0x912ce59144191c1204e64559fe8253a0e49e6548",
-        },
-      },
-      {
         code: "ETH",
         address: "0x0000000000000000000000000000000000000000",
         decimals: 18,
         priceSource: {
-          chainId: 42161,
+          chainId: 421614,
           address: "0x0000000000000000000000000000000000000000",
         },
       },
@@ -195,51 +61,8 @@ const CHAINS: Chain[] = [
     subscriptions: [
       {
         contractName: "PharoV2/PharoToken",
-        address: "0x966136116a13fa8aCBf3d3F5f1E212667d85b749",
-        fromBlock: 123566896,
-      },
-    ],
-  },
-  {
-    id: 421613,
-    name: "arbitrum-goerli",
-    rpc: rpcUrl
-      .default("https://arb-goerli.g.alchemy.com/v2/")
-      .parse(process.env.ARBITRUM_GOERLI_RPC_URL),
-    pricesFromTimestamp: Date.UTC(2023, 7, 1, 0, 0, 0),
-    tokens: [
-      {
-        code: "USDC",
-        address: "0xfd064A18f3BF249cf1f87FC203E90D8f650f2d63",
-        decimals: 6,
-        priceSource: {
-          chainId: 42161,
-          address: "0xaf88d065e77c8cC2239327C5EDb3A432268e5831",
-        },
-      },
-      {
-        code: "ARB",
-        address: "0xB50721BCf8d664c30412Cfbc6cf7a15145234ad1",
-        decimals: 18,
-        priceSource: {
-          chainId: 42161,
-          address: "0x912ce59144191c1204e64559fe8253a0e49e6548",
-        },
-      },
-      {
-        code: "ETH",
-        address: "0x0000000000000000000000000000000000000000",
-        decimals: 18,
-        priceSource: {
-          chainId: 42161,
-          address: "0x0000000000000000000000000000000000000000",
-        },
-      },
-    ],
-    subscriptions: [
-      {
-        contractName: "PharoV2/PharoToken",
-        address: "0x966136116a13fa8aCBf3d3F5f1E212667d85b749",
+        address: "0xB4204ecc047F026ABfC3B5794cFDBF7dAC7C4C9E",
+        fromBlock: 21512000,
       },
     ],
   },
@@ -270,13 +93,7 @@ const CHAINS: Chain[] = [
         },
       },
     ],
-    subscriptions: [
-      {
-        contractName: "PharoV2/PharoToken",
-        address: "0x966136116a13fa8aCBf3d3F5f1E212667d85b749",
-        fromBlock: 39793132,
-      },
-    ],
+    subscriptions: [],
   },
   {
     id: 137,
@@ -305,13 +122,7 @@ const CHAINS: Chain[] = [
         },
       },
     ],
-    subscriptions: [
-      {
-        contractName: "PharoV2/PharoToken",
-        address: "0x966136116a13fa8aCBf3d3F5f1E212667d85b749",
-        fromBlock: 47215935,
-      },
-    ],
+    subscriptions: [],
   },
   {
     id: 8453,
@@ -340,13 +151,36 @@ const CHAINS: Chain[] = [
         },
       },
     ],
-    subscriptions: [
+    subscriptions: [],
+  },
+  {
+    id: 84532,
+    name: "base-sepolia",
+    rpc: rpcUrl
+      .default("https://sepolia.base.org")
+      .parse(process.env.BASE_SEPOLIA_RPC_URL),
+    pricesFromTimestamp: Date.UTC(2023, 12, 1, 0, 0, 0),
+    tokens: [
       {
-        address: "0x966136116a13fa8aCBf3d3F5f1E212667d85b749",
-        contractName: "PharoV2/PharoToken",
-        fromBlock: 7151900,
+        code: "USDC",
+        address: "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        decimals: 6,
+        priceSource: {
+          chainId: 1,
+          address: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        },
+      },
+      {
+        code: "ETH",
+        address: "0x0000000000000000000000000000000000000000",
+        decimals: 18,
+        priceSource: {
+          chainId: 1,
+          address: "0x0000000000000000000000000000000000000000",
+        },
       },
     ],
+    subscriptions: [],
   },
   {
     id: 324,
@@ -402,13 +236,7 @@ const CHAINS: Chain[] = [
         },
       },
     ],
-    subscriptions: [
-      {
-        address: "0x966136116a13fa8aCBf3d3F5f1E212667d85b749",
-        contractName: "PharoV2/PharoToken",
-        fromBlock: 20900000,
-      },
-    ],
+    subscriptions: [],
   },
   {
     id: 280,
@@ -428,13 +256,7 @@ const CHAINS: Chain[] = [
         },
       },
     ],
-    subscriptions: [
-      {
-        address:
-          "0x966136116a13fa8aCBf3d3F5f1E212667d85b749,e3ed120c5181651D50719329788",
-        contractName: "PharoV2/PharoToken",
-      },
-    ],
+    subscriptions: [],
   },
   {
     id: 534351,
@@ -455,13 +277,7 @@ const CHAINS: Chain[] = [
         },
       },
     ],
-    subscriptions: [
-      {
-        contractName: "PharoV2/PharoToken",
-        address: "0x966136116a13fa8aCBf3d3F5f1E212667d85b749",
-        fromBlock: 2774478,
-      },
-    ],
+    subscriptions: [],
   },
   {
     id: 534352,
@@ -490,13 +306,7 @@ const CHAINS: Chain[] = [
         },
       },
     ],
-    subscriptions: [
-      {
-        contractName: "PharoV2/PharoToken",
-        address: "0x966136116a13fa8aCBf3d3F5f1E212667d85b749",
-        fromBlock: 2683205,
-      },
-    ],
+    subscriptions: [],
   },
 ];
 

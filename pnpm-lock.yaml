@@ -7230,6 +7230,7 @@ packages:
     id: github.com/gitcoinco/chainsauce/c9af5345ba7f40b7c3c857b329875a137ad34497
     name: chainsauce
     version: 1.0.20
+    prepare: true
     requiresBuild: true
     dependencies:
       '@types/pg': 8.11.2
