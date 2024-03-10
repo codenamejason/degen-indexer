@@ -156,15 +156,13 @@ export class Database {
   }
 
   async applyChange(change: any): Promise<void> {
-    console.log({ name: { ...change } }, "applyChange");
-
     switch (change.type) {
       case "InsertTransfer":
-        console.log({ change }, "Transfer db insert");
         await this.#db
           .insertInto("transfers")
           .values({
-            ...change,
+            ...change.transfer,
+            transfered_at: change.transfer.transfered_at,
           })
           .executeTakeFirst();
         break;

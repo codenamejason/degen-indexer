@@ -11,6 +11,7 @@ import "dotenv/config";
 import * as pg from "pg";
 import { pino } from "pino";
 import { throttle } from "throttle-debounce";
+import { parseAddress } from "./address.js";
 import { Config, getConfig } from "./config.js";
 import { Changeset, Database } from "./database/index.js";
 import abis from "./indexer/abis/index.js";
@@ -31,27 +32,30 @@ const rpcClient = createHttpRpcClient({
   },
 });
 
-async function handleTransferEvent(
+async function handleTokenEvent(
   args: EventHandlerArgs<Indexer>
 ): Promise<Changeset[]> {
   console.log("Transfer event:", args);
 
-  const { event } = args;
-
-  switch (event.name) {
+  switch (args.event.name) {
     case "Transfer":
-      const args = event.params;
-
-      console.log("shit and more shit event:", args);
+      const {
+        chainId,
+        event,
+        subscribeToContract,
+        readContract,
+        getBlock
+      } = args;
+      const params = args.event.params;
 
       return [
         {
           type: "InsertTransfer",
           transfer: {
             id: randomUUID(),
-            from: args.from,
-            to: args.to,
-            amount: BigInt(args.value),
+            from: parseAddress(params.from),
+            to: parseAddress(params.to),
+            amount: BigInt(params.value),
             transfered_at: BigInt(new Date().getTime()),
             block_number: BigInt(event.blockNumber),
           },
@@ -59,7 +63,7 @@ async function handleTransferEvent(
       ];
 
     default:
-      throw new Error(`unsupported event: ${event.name}`);
+      throw new Error(`unsupported event: ${args.event.name}`);
   }
 }
 
@@ -147,8 +151,8 @@ async function main(): Promise<void> {
     console.log("Event: shit", args);
 
     if (args.event.name === "Transfer") {
-      // console.log("Transfer event:", args);
-      await handleTransferEvent(args as EventHandlerArgs<Indexer>)
+      console.log("Transfer event args:", args);
+      await handleTokenEvent(args as EventHandlerArgs<Indexer>)
         .then(async (changeset: Changeset[]) => {
           console.log("fucking changeset", changeset);
           await db.applyChanges(changeset);

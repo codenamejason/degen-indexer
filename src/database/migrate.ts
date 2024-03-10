@@ -30,8 +30,8 @@ export async function migrate<T>(db: Kysely<T>, schemaName: string) {
     .addColumn("from", ADDRESS_TYPE)
     .addColumn("to", ADDRESS_TYPE)
     .addColumn("amount", BIGINT_TYPE)
-    .addColumn("transferedAt", BIGINT_TYPE)
-    .addColumn("blockNumber", BIGINT_TYPE)
+    .addColumn("transfered_at", BIGINT_TYPE)
+    .addColumn("block_number", BIGINT_TYPE)
 
     .addPrimaryKeyConstraint("transfers_pkey", ["id"])
 
