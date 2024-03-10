@@ -1,12 +1,12 @@
 import { UUID } from "crypto";
 import { Generated, Insertable, Selectable, Updateable } from "kysely";
-import { Address, ChainId, UserRole } from "../types.js";
+import { Address, ChainId, TPharoState, TUserRole } from "../types.js";
 
 export type User = {
   address: Address;
   name: string;
   email: string;
-  role: UserRole;
+  role: TUserRole;
 };
 
 export type UserTable = User & {
@@ -77,23 +77,17 @@ export type Obelisk = {
 };
 
 export type ObeliskTable = Obelisk & {
-  id: Generated<number>;
-  chainId: ChainId;
-  timestamp: Date;
+  id: string;
   blockNumber: bigint;
 };
 
 export type PolicyTable = CoverPolicy & {
-  id: Generated<number>;
-  chainId: ChainId;
-  timestamp: Date;
+  id: string;
   blockNumber: bigint;
 };
 
 export type LiquidityProductTable = LiquidityProduct & {
-  id: Generated<number>;
-  chainId: ChainId;
-  timestamp: Date;
+  id: string;
   blockNumber: bigint;
 };
 
@@ -109,20 +103,18 @@ export type PriceTable = {
 // NOTE: converted from WoC to WoS (wisdom of crowds to wisdom of stakeholders)
 export type WoS = {
   pharoId: number;
-  alpha: number;
-  beta: number;
-  rateProbable: number;
-  minConfidence: number;
-  maxConfidence: number;
-  gof: number;
-  gammaX: number[];
-  gammaY: number[];
+  alpha: bigint;
+  beta: bigint;
+  rateProbable: bigint;
+  minConfidence: bigint;
+  maxConfidence: bigint;
+  gof: bigint;
+  gammaX: bigint[];
+  gammaY: bigint[];
 };
 
 export type WoSTable = WoS & {
-  id: Generated<number>;
-  chainId: ChainId;
-  timestamp: Date;
+  id: string;
   blockNumber: bigint;
 };
 
@@ -133,9 +125,7 @@ export type SignedPosition = {
 };
 
 export type SignedPositionTable = SignedPosition & {
-  id: Generated<number>;
-  chainId: ChainId;
-  timestamp: Date;
+  id: string;
   blockNumber: bigint;
 };
 
@@ -147,9 +137,7 @@ export type SignedPolicy = {
 };
 
 export type SignedPolicyTable = SignedPolicy & {
-  id: Generated<number>;
-  chainId: ChainId;
-  timestamp: Date;
+  id: string;
   blockNumber: bigint;
 };
 
@@ -159,9 +147,7 @@ export type UserRewards = {
 };
 
 export type UserRewardsTable = UserRewards & {
-  id: Generated<number>;
-  chainId: ChainId;
-  timestamp: bigint;
+  id: string;
   blockNumber: bigint;
 };
 
@@ -186,6 +172,33 @@ export type RoleTable = Role & {
   id: string;
   created_at: bigint;
   updated_at: bigint;
+};
+
+export type Pharo = {
+  pharoId: bigint;
+  name: string;
+  description: string;
+  lifetime: bigint;
+  birthdate: bigint;
+  state: TPharoState;
+  trueEventTime: bigint;
+};
+
+export type PharoTable = Pharo & {
+  id: string;
+  blockNumber: bigint;
+};
+
+export type LockToken = {
+  user: Address;
+  amount: bigint;
+  validity: bigint;
+  claimed: boolean;
+};
+
+export type LockTokenTable = LockToken & {
+  id: string;
+  blockNumber: bigint;
 };
 
 export type TNewPolicy = Insertable<PolicyTable>;
@@ -217,3 +230,9 @@ export type TNewUser = Insertable<UserTable>;
 export type TNewRole = Selectable<RoleTable>;
 export type TRole = Selectable<RoleTable>;
 export type TPartialRole = Updateable<RoleTable>;
+export type TNewPharo = Insertable<PharoTable>;
+export type TPharo = Selectable<PharoTable>;
+export type TPartialPharo = Updateable<PharoTable>;
+export type TNewLockToken = Insertable<LockTokenTable>;
+export type TLockToken = Selectable<LockTokenTable>;
+export type TPartialLockToken = Updateable<LockTokenTable>;

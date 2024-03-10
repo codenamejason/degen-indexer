@@ -13,7 +13,7 @@ export async function migrate<T>(db: Kysely<T>, schemaName: string) {
 
   await schema
     .createTable("users")
-    .addColumn("id", "uuid")
+    .addColumn("id", "text")
     .addColumn("address", ADDRESS_TYPE)
     .addColumn("name", "text")
     .addColumn("email", "text")
@@ -39,10 +39,17 @@ export async function migrate<T>(db: Kysely<T>, schemaName: string) {
 
   await schema
     .createTable("wos")
-    .addColumn("id", "uuid")
-    .addColumn("chainId", CHAIN_ID_TYPE)
-    .addColumn("timestamp", "timestamp")
+    .addColumn("id", "text")
     .addColumn("blockNumber", BIGINT_TYPE)
+    .addColumn("pharoId", BIGINT_TYPE)
+    .addColumn("alpha", BIGINT_TYPE)
+    .addColumn("beta", BIGINT_TYPE)
+    .addColumn("rateProbable", BIGINT_TYPE)
+    .addColumn("minConfidence", BIGINT_TYPE)
+    .addColumn("maxConfidence", BIGINT_TYPE)
+    .addColumn("gof", BIGINT_TYPE)
+    .addColumn("gammaX", BIGINT_TYPE)
+    .addColumn("gammaY", BIGINT_TYPE)
 
     .addPrimaryKeyConstraint("wos_pkey", ["id"])
 
@@ -50,9 +57,7 @@ export async function migrate<T>(db: Kysely<T>, schemaName: string) {
 
   await schema
     .createTable("signed_positions")
-    .addColumn("id", "uuid")
-    .addColumn("chainId", CHAIN_ID_TYPE)
-    .addColumn("timestamp", "timestamp")
+    .addColumn("id", "text")
     .addColumn("blockNumber", BIGINT_TYPE)
     .addColumn("maxRisk", BIGINT_TYPE)
     .addColumn("stakeAmount", BIGINT_TYPE)
@@ -64,9 +69,7 @@ export async function migrate<T>(db: Kysely<T>, schemaName: string) {
 
   await schema
     .createTable("signed_policies")
-    .addColumn("id", "uuid")
-    .addColumn("chainId", CHAIN_ID_TYPE)
-    .addColumn("timestamp", "timestamp")
+    .addColumn("id", "text")
     .addColumn("blockNumber", BIGINT_TYPE)
     .addColumn("minCover", BIGINT_TYPE)
     .addColumn("premium", BIGINT_TYPE)
@@ -79,7 +82,7 @@ export async function migrate<T>(db: Kysely<T>, schemaName: string) {
 
   await schema
     .createTable("user_rewards")
-    .addColumn("id", "uuid")
+    .addColumn("id", "text")
     .addColumn("chainId", CHAIN_ID_TYPE)
     .addColumn("timestamp", BIGINT_TYPE)
     .addColumn("blockNumber", BIGINT_TYPE)
@@ -92,7 +95,7 @@ export async function migrate<T>(db: Kysely<T>, schemaName: string) {
 
   await schema
     .createTable("prices")
-    .addColumn("id", "uuid")
+    .addColumn("id", "text")
     .addColumn("chainId", CHAIN_ID_TYPE)
     .addColumn("timestamp", "timestamp")
     .addColumn("blockNumber", BIGINT_TYPE)
@@ -117,9 +120,9 @@ export async function migrate<T>(db: Kysely<T>, schemaName: string) {
 
   await schema
     .createTable("user_roles")
-    .addColumn("id", "uuid")
-    .addColumn("userId", "uuid")
-    .addColumn("roleId", "uuid")
+    .addColumn("id", "text")
+    .addColumn("userId", "text")
+    .addColumn("roleId", "text")
 
     .addPrimaryKeyConstraint("user_roles_pkey", ["id"])
 
@@ -127,11 +130,41 @@ export async function migrate<T>(db: Kysely<T>, schemaName: string) {
 
   await schema
     .createTable("contracts")
-    .addColumn("id", "uuid")
+    .addColumn("id", "text")
     .addColumn("name", "text")
     .addColumn("address", ADDRESS_TYPE)
 
     .addPrimaryKeyConstraint("contracts_pkey", ["id"])
+
+    .execute();
+
+  await schema
+    .createTable("pharos")
+    .addColumn("id", "text")
+    .addColumn("pharoId", BIGINT_TYPE)
+    .addColumn("name", "text")
+    .addColumn("description", "text")
+    .addColumn("lifetime", BIGINT_TYPE)
+    .addColumn("state", "text")
+    .addColumn("trueEventTime", BIGINT_TYPE)
+    .addColumn("birthdate", BIGINT_TYPE)
+    .addColumn("blockNumber", BIGINT_TYPE)
+    .addColumn("created_at", BIGINT_TYPE)
+
+    .addPrimaryKeyConstraint("pharos_pkey", ["id"])
+
+    .execute();
+
+  await schema
+    .createTable("lock_tokens")
+    .addColumn("id", "text")
+    .addColumn("blockNumber", BIGINT_TYPE)
+    .addColumn("user", ADDRESS_TYPE)
+    .addColumn("amount", BIGINT_TYPE)
+    .addColumn("validity", BIGINT_TYPE)
+    .addColumn("claimed", "boolean")
+
+    .addPrimaryKeyConstraint("lock_tokens_pkey", ["id"])
 
     .execute();
 }

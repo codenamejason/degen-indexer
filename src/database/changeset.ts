@@ -1,6 +1,8 @@
 import {
   TNewLiquidityProduct,
+  TNewLockToken,
   TNewObelisk,
+  TNewPharo,
   TNewPolicy,
   TNewPrice,
   TNewRole,
@@ -11,7 +13,9 @@ import {
   TNewUserRewards,
   TNewWoS,
   TPartialLiquidityProduct,
+  TPartialLockToken,
   TPartialObelisk,
+  TPartialPharo,
   TPartialPolicy,
   TPartialPrice,
   TPartialRole,
@@ -147,5 +151,31 @@ export type DataChange =
       type: "UpdateRole";
       roleId: number;
       role: TPartialRole;
+    }
+  | {
+      type: "InsertPharo";
+      pharo: TNewPharo;
+    }
+  | {
+      type: "DeletePharo";
+      pharoId: number;
+    }
+  | {
+      type: "UpdatePharo";
+      pharoId: number;
+      pharo: TPartialPharo;
+    }
+  | {
+      type: "InsertLockToken";
+      lockToken: TNewLockToken;
+    }
+  | {
+      type: "DeleteLockToken";
+      lockTokenId: number;
+    }
+  | {
+      type: "UpdateLockToken";
+      lockTokenId: number;
+      lockToken: TPartialLockToken;
     }
   | { [key: string]: any };
