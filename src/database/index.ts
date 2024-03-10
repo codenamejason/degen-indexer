@@ -1,19 +1,45 @@
-import { CamelCasePlugin, Kysely, PostgresDialect, sql } from "kysely";
-import { Pool } from "pg";
-
-import { PriceTable, TNewPolicy, UserTable } from "./schema.js";
-
+import {
+    CamelCasePlugin,
+    Kysely,
+    PostgresDialect,
+    ValueExpression,
+    sql,
+} from "kysely";
 import { LRUCache } from "lru-cache";
+import { Pool } from "pg";
 import { Logger } from "pino";
+import { v4 as uuidv4 } from "uuid";
 import { Address } from "../address.js";
 import { ChainId } from "../types.js";
 import { DataChange } from "./changeset.js";
+import { migrate } from "./migrate.js";
+import {
+    LiquidityProductTable,
+    ObeliskTable,
+    PolicyTable,
+    PriceTable,
+    SignedPolicyTable,
+    SignedPositionTable,
+    TNewPolicy,
+    TransferTable,
+    UserRewardsTable,
+    UserTable,
+    WoSTable,
+} from "./schema.js";
 
 export type { DataChange as Changeset };
 
 interface Tables {
   users: UserTable;
   prices: PriceTable;
+  obelisks: ObeliskTable;
+  policies: PolicyTable;
+  liquidityProducts: LiquidityProductTable;
+  signedPolicies: SignedPolicyTable;
+  signedPositions: SignedPositionTable;
+  userRewards: UserRewardsTable;
+  wos: WoSTable;
+  transfers: TransferTable;
 }
 
 type KyselyDb = Kysely<Tables>;
@@ -57,25 +83,25 @@ export class Database {
   }
 
   private async flushPolicyQueue() {
-    const donations = this.#policyQueue.splice(0, this.#policyQueue.length);
+    const policies = this.#policyQueue.splice(0, this.#policyQueue.length);
 
-    if (donations.length === 0) {
+    if (policies.length === 0) {
       return;
     }
 
-    // chunk donations into batches of 1k to void hitting the 65k parameter limit
+    // chunk policies into batches of 1k to void hitting the 65k parameter limit
     // https://github.com/brianc/node-postgres/issues/1463
     const chunkSize = 1_000;
     const chunks = [];
 
-    for (let i = 0; i < donations.length; i += chunkSize) {
-      chunks.push(donations.slice(i, i + chunkSize));
+    for (let i = 0; i < policies.length; i += chunkSize) {
+      chunks.push(policies.slice(i, i + chunkSize));
     }
 
     for (const chunk of chunks) {
       await this.applyChange({
         type: "InsertManyDonations",
-        donations: chunk,
+        policies: chunk,
       });
     }
   }
@@ -110,17 +136,42 @@ export class Database {
     await this.#db.transaction().execute(async (tx) => {
       await tx.schema.createSchema(this.databaseSchemaName).execute();
 
-      // await migrate(tx, this.databaseSchemaName);
+      await migrate(tx, this.databaseSchemaName);
     });
   }
 
+  generateUuid() {
+    return uuidv4() as ValueExpression<
+      Tables,
+      "transfers",
+      `${string}-${string}-${string}-${string}-${string}`
+    >;
+  }
+
   async applyChanges(changes: any[]): Promise<void> {
+    console.log({ changes, transfer: changes[0].transfer }, "applyChanges");
     for (const change of changes) {
       await this.applyChange(change);
     }
   }
 
-  async applyChange(change: any): Promise<void> {}
+  async applyChange(change: any): Promise<void> {
+    console.log({ name: { ...change } }, "applyChange");
+
+    switch (change.type) {
+      case "InsertTransfer":
+        console.log({ change }, "Transfer db insert");
+        await this.#db
+          .insertInto("transfers")
+          .values({
+            ...change,
+          })
+          .executeTakeFirst();
+        break;
+      default:
+        throw new Error(`unsupported change type: ${change.type}`);
+    }
+  }
 
   async getTokenPriceByBlockNumber(
     chainId: ChainId,

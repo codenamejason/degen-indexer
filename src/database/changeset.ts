@@ -5,6 +5,9 @@ import {
   TNewPrice,
   TNewSignedPolicy,
   TNewSignedPosition,
+  TNewTransfer,
+  TNewUser,
+  TNewUserRewards,
   TNewWoS,
   TPartialLiquidityProduct,
   TPartialObelisk,
@@ -12,6 +15,7 @@ import {
   TPartialPrice,
   TPartialSignedPolicy,
   TPartialSignedPosition,
+  TPartialUserRewards,
   TPartialWoS,
 } from "./schema.js";
 
@@ -104,5 +108,29 @@ export type DataChange =
   | {
       type: "DeleteLiquidityProduct";
       liquidityProductId: number;
+    }
+  | {
+      type: "InsertUserRewards";
+      userRewards: TNewUserRewards;
+    }
+  | {
+      type: "DeleteUserRewards";
+      userRewardsId: number;
+    }
+  | {
+      type: "UserRewards";
+      user: TPartialUserRewards;
+    }
+  | {
+      type: "InsertTransfer";
+      transfer: TNewTransfer;
+    }
+  | {
+      type: "DeleteTransfer";
+      transferId: number;
+    }
+  | {
+      type: "InsertUser";
+      user: TNewUser;
     }
   | { [key: string]: any };

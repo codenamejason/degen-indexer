@@ -1,7 +1,16 @@
+import { UUID } from "crypto";
 import { Generated, Insertable, Selectable, Updateable } from "kysely";
-import { Address, ChainId, User } from "../types.js";
+import { Address, ChainId, UserRole } from "../types.js";
+
+export type User = {
+  address: Address;
+  name: string;
+  email: string;
+  role: UserRole;
+};
 
 export type UserTable = User & {
+  id: Generated<UUID>;
   created_at: Date;
   updated_at: Date;
 };
@@ -144,6 +153,30 @@ export type SignedPolicyTable = SignedPolicy & {
   blockNumber: bigint;
 };
 
+export type UserRewards = {
+  user: Address;
+  reward: number;
+};
+
+export type UserRewardsTable = UserRewards & {
+  id: Generated<number>;
+  chainId: ChainId;
+  timestamp: bigint;
+  blockNumber: bigint;
+};
+
+export type Transfer = {
+  from: Address;
+  to: Address;
+  amount: bigint;
+};
+
+export type TransferTable = Transfer & {
+  id: string;
+  transfered_at: bigint;
+  block_number: bigint;
+};
+
 export type TNewPolicy = Insertable<PolicyTable>;
 export type TPolicy = Selectable<PolicyTable>;
 export type TPartialPolicy = Updateable<PolicyTable>;
@@ -165,3 +198,8 @@ export type TPartialSignedPosition = Updateable<SignedPositionTable>;
 export type TNewSignedPolicy = Insertable<SignedPolicyTable>;
 export type TSignedPolicy = Selectable<SignedPolicyTable>;
 export type TPartialSignedPolicy = Updateable<SignedPolicyTable>;
+export type TNewUserRewards = Insertable<UserRewardsTable>;
+export type TUserRewards = Selectable<UserRewardsTable>;
+export type TPartialUserRewards = Updateable<UserRewardsTable>;
+export type TNewTransfer = Insertable<TransferTable>;
+export type TNewUser = Insertable<UserTable>;

@@ -26,6 +26,9 @@ dependencies:
   '@teamawesome/tiny-batch':
     specifier: ^1.0.7
     version: 1.0.7
+  '@types/uuid':
+    specifier: ^9.0.8
+    version: 9.0.8
   async-retry:
     specifier: ^1.3.3
     version: 1.3.3
@@ -223,6 +226,9 @@ devDependencies:
   typescript:
     specifier: ^5.2.2
     version: 5.4.2
+  uuid:
+    specifier: 9.0.1
+    version: 9.0.1
   vitest:
     specifier: 0.34.5
     version: 0.34.5
@@ -6343,7 +6349,6 @@ packages:
   /uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
-    dev: false
 
   /varint@5.0.2:
     resolution: {integrity: sha512-lKxKYG6H03yCZUpAGOPOsMcGxd1RHCu1iKvEHYDPmTyq2HueGhD73ssNBqqQWfvYs04G9iUFRvmAVLW20Jw6ow==}
@@ -7230,7 +7235,6 @@ packages:
     id: github.com/gitcoinco/chainsauce/c9af5345ba7f40b7c3c857b329875a137ad34497
     name: chainsauce
     version: 1.0.20
-    prepare: true
     requiresBuild: true
     dependencies:
       '@types/pg': 8.11.2
