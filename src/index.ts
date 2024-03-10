@@ -1,21 +1,18 @@
 import {
   Abi,
-  EventHandlerArgs,
   createHttpRpcClient,
   createIndexer,
   createPostgresSubscriptionStore,
 } from "chainsauce";
 import { IndexerEvents } from "chainsauce/dist/indexer.js";
-import { randomUUID } from "crypto";
 import "dotenv/config";
 import * as pg from "pg";
 import { pino } from "pino";
 import { throttle } from "throttle-debounce";
-import { parseAddress } from "./address.js";
 import { Config, getConfig } from "./config.js";
 import { Changeset, Database } from "./database/index.js";
 import abis from "./indexer/abis/index.js";
-import { Indexer } from "./indexer/indexer.js";
+import { handleEvent } from "./indexer/handleEvent.js";
 const { Pool, types } = pg.default;
 
 // const { Pool, types } = pg.default;
@@ -31,41 +28,6 @@ const rpcClient = createHttpRpcClient({
     console.log(`RPC Request ${method}`, params);
   },
 });
-
-async function handleTokenEvent(
-  args: EventHandlerArgs<Indexer>
-): Promise<Changeset[]> {
-  console.log("Transfer event:", args);
-
-  switch (args.event.name) {
-    case "Transfer":
-      const {
-        chainId,
-        event,
-        subscribeToContract,
-        readContract,
-        getBlock
-      } = args;
-      const params = args.event.params;
-
-      return [
-        {
-          type: "InsertTransfer",
-          transfer: {
-            id: randomUUID(),
-            from: parseAddress(params.from),
-            to: parseAddress(params.to),
-            amount: BigInt(params.value),
-            transfered_at: BigInt(new Date().getTime()),
-            block_number: BigInt(event.blockNumber),
-          },
-        },
-      ];
-
-    default:
-      throw new Error(`unsupported event: ${args.event.name}`);
-  }
-}
 
 async function main(): Promise<void> {
   console.log("Hello, Pharo indexing folks!");
@@ -148,22 +110,16 @@ async function main(): Promise<void> {
   }
 
   indexer.on("event", async (args) => {
-    console.log("Event: shit", args);
-
-    if (args.event.name === "Transfer") {
-      console.log("Transfer event args:", args);
-      await handleTokenEvent(args as EventHandlerArgs<Indexer>)
-        .then(async (changeset: Changeset[]) => {
-          console.log("fucking changeset", changeset);
-          await db.applyChanges(changeset);
-        })
-        .catch((err: unknown) => {
-          console.warn({
-            msg: "error while processing event",
-            err,
-          });
+    await handleEvent(args)
+      .then(async (changeset: Changeset[]) => {
+        await db.applyChanges(changeset);
+      })
+      .catch((err: unknown) => {
+        console.warn({
+          msg: "error while processing event",
+          err,
         });
-    }
+      });
   });
 
   indexer.on(

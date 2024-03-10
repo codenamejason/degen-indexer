@@ -3,6 +3,7 @@ import {
   TNewObelisk,
   TNewPolicy,
   TNewPrice,
+  TNewRole,
   TNewSignedPolicy,
   TNewSignedPosition,
   TNewTransfer,
@@ -13,6 +14,7 @@ import {
   TPartialObelisk,
   TPartialPolicy,
   TPartialPrice,
+  TPartialRole,
   TPartialSignedPolicy,
   TPartialSignedPosition,
   TPartialUserRewards,
@@ -132,5 +134,18 @@ export type DataChange =
   | {
       type: "InsertUser";
       user: TNewUser;
+    }
+  | {
+      type: "InsertRole";
+      role: TNewRole;
+    }
+  | {
+      type: "DeleteRole";
+      roleId: number;
+    }
+  | {
+      type: "UpdateRole";
+      roleId: number;
+      role: TPartialRole;
     }
   | { [key: string]: any };

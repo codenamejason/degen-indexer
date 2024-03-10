@@ -18,6 +18,7 @@ import {
     ObeliskTable,
     PolicyTable,
     PriceTable,
+    RoleTable,
     SignedPolicyTable,
     SignedPositionTable,
     TNewPolicy,
@@ -40,6 +41,7 @@ interface Tables {
   userRewards: UserRewardsTable;
   wos: WoSTable;
   transfers: TransferTable;
+  roles: RoleTable;
 }
 
 type KyselyDb = Kysely<Tables>;
@@ -149,7 +151,6 @@ export class Database {
   }
 
   async applyChanges(changes: any[]): Promise<void> {
-    console.log({ changes, transfer: changes[0].transfer }, "applyChanges");
     for (const change of changes) {
       await this.applyChange(change);
     }
@@ -163,6 +164,15 @@ export class Database {
           .values({
             ...change.transfer,
             transfered_at: change.transfer.transfered_at,
+          })
+          .executeTakeFirst();
+        break;
+
+      case "InsertRole":
+        await this.#db
+          .insertInto("roles")
+          .values({
+            ...change.role,
           })
           .executeTakeFirst();
         break;

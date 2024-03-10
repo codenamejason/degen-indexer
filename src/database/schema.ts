@@ -177,6 +177,17 @@ export type TransferTable = Transfer & {
   block_number: bigint;
 };
 
+export type Role = {
+  user: Address;
+  role: string;
+};
+
+export type RoleTable = Role & {
+  id: string;
+  created_at: bigint;
+  updated_at: bigint;
+};
+
 export type TNewPolicy = Insertable<PolicyTable>;
 export type TPolicy = Selectable<PolicyTable>;
 export type TPartialPolicy = Updateable<PolicyTable>;
@@ -203,3 +214,6 @@ export type TUserRewards = Selectable<UserRewardsTable>;
 export type TPartialUserRewards = Updateable<UserRewardsTable>;
 export type TNewTransfer = Insertable<TransferTable>;
 export type TNewUser = Insertable<UserTable>;
+export type TNewRole = Selectable<RoleTable>;
+export type TRole = Selectable<RoleTable>;
+export type TPartialRole = Updateable<RoleTable>;
