@@ -1,4 +1,5 @@
 // import { ToBlock } from "chainsauce";
+import { Logger } from "chainsauce";
 import "dotenv/config";
 import os from "node:os";
 import path from "node:path";
@@ -39,6 +40,8 @@ export type Chain = {
 
 const rpcUrl = z.string().url();
 
+export type baseLogger = Logger;
+
 const CHAINS: Chain[] = [
   {
     id: 421614,
@@ -62,6 +65,36 @@ const CHAINS: Chain[] = [
       {
         contractName: "PharoV2/PharoToken",
         address: "0xB4204ecc047F026ABfC3B5794cFDBF7dAC7C4C9E",
+        fromBlock: 21512000,
+      },
+      {
+        contractName: "PharoV2/PharoReservePool",
+        address: "0xe9C7726146647cfF567078ee233C9aeE031A3260",
+        fromBlock: 21512000,
+      },
+      {
+        contractName: "PharoV2/PharoRiskPool",
+        address: "0xeb57e57dB924A052A2338E7FB9fBF8Fa40b589D3",
+        fromBlock: 21512000,
+      },
+      {
+        contractName: "PharoV2/PharoPhinance",
+        address: "0x6B914a417C2640eeca34829Bf303Af2604829A03",
+        fromBlock: 21512000,
+      },
+      {
+        contractName: "PharoV2/PharoCover",
+        address: "0x9107873027cD892eCB127D7AE978A82610F7aB86",
+        fromBlock: 21512000,
+      },
+      {
+        contractName: "PharoV2/PharoMarket",
+        address: "0x34508Cb1b4aFA25Fb6f1aCb25180A48aC2Cae0A1",
+        fromBlock: 21512000,
+      },
+      {
+        contractName: "PharoV2/PharoRewards",
+        address: "0x630ab9f5D44d2e5aca744Bfad644A4bBb426836A",
         fromBlock: 21512000,
       },
     ],
@@ -345,7 +378,6 @@ export type Config = {
   cacheDir: string | null;
   fromBlock: bigint | "latest";
   toBlock: any;
-  passportScorerId: number;
   logLevel: "trace" | "debug" | "info" | "warn" | "error";
   httpServerWaitForSync: boolean;
   ipfsGateway: string;
@@ -353,13 +385,13 @@ export type Config = {
   coingeckoApiUrl: string;
   chains: Chain[];
   runOnce: boolean;
-  apiHttpPort: number;
+  // apiHttpPort: number;
   sentryDsn: string | null;
   databaseUrl: string;
   databaseSchemaName: string;
   hostname: string;
-  deploymentEnvironment: "local" | "development" | "staging" | "production";
-  enableResourceMonitor: boolean;
+  // deploymentEnvironment: "local" | "development" | "staging" | "production";
+  // enableResourceMonitor: boolean;
   dropDb: boolean;
   estimatesLinearQfWorkerPoolSize: number | null;
 };
@@ -370,25 +402,21 @@ export function getConfig(): Config {
     .default(null)
     .parse(process.env.BUILD_TAG);
 
-  const enableResourceMonitor = z
-    .enum(["true", "false"])
-    .transform((value) => value === "true")
-    .parse(process.env.ENABLE_RESOURCE_MONITOR);
+  // const enableResourceMonitor = z
+  //   .enum(["true", "false"])
+  //   .transform((value) => value === "true")
+  //   .parse(process.env.ENABLE_RESOURCE_MONITOR);
 
-  const apiHttpPort = z.coerce.number().parse(process.env.PORT);
+  // const apiHttpPort = z.coerce.number().parse(process.env.PORT);
 
-  const deploymentEnvironment = z
-    .union([
-      z.literal("local"),
-      z.literal("development"),
-      z.literal("staging"),
-      z.literal("production"),
-    ])
-    .parse(process.env.DEPLOYMENT_ENVIRONMENT);
-
-  const passportScorerId = z.coerce
-    .number()
-    .parse(process.env.PASSPORT_SCORER_ID);
+  // const deploymentEnvironment = z
+  //   .union([
+  //     z.literal("local"),
+  //     z.literal("development"),
+  //     z.literal("staging"),
+  //     z.literal("production"),
+  //   ])
+  //   .parse(process.env.DEPLOYMENT_ENVIRONMENT);
 
   const coingeckoApiKey = z
     .union([z.string(), z.null()])
@@ -517,10 +545,9 @@ export function getConfig(): Config {
     logLevel,
     runOnce,
     ipfsGateway,
-    passportScorerId,
-    apiHttpPort,
-    deploymentEnvironment,
-    enableResourceMonitor,
+    // apiHttpPort,
+    // deploymentEnvironment,
+    // enableResourceMonitor,
     databaseUrl,
     dropDb,
     databaseSchemaName,

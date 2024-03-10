@@ -22,51 +22,93 @@
 // import PgSimplifyInflectorPlugin from "@graphile-contrib/pg-simplify-inflector";
 // import { ContractSubscriptionPruner } from "./contractSubscriptionPruner.js";
 
-import { createHttpRpcClient, createIndexer } from "chainsauce";
+import { Abi, createHttpRpcClient, createIndexer } from "chainsauce";
 import "dotenv/config";
+import { Config, getConfig } from "./config.js";
 import abis from "./indexer/abis/index.js";
 
 // const { Pool, types } = pg.default;
 // const RESOURCE_MONITOR_INTERVAL_MS = 1 * 60 * 1000; // every minute
+const config = getConfig();
 
-const PhroTokenContract = {
-  ERC20: abis["PharoV2/PharoToken"],
-};
+const rpcClient = createHttpRpcClient({
+  retryDelayMs: 1000,
+  maxConcurrentRequests: 10,
+  maxRetries: 3,
+  url: config.chains[0].rpc,
+  onRequest({ method, params }) {
+    console.log(`RPC Request ${method}`, params);
+  },
+});
 
 const indexer = createIndexer({
-  contracts: PhroTokenContract,
+  contracts: abis as Record<string, Abi>,
   chain: {
     id: 421614,
     rpcClient: createHttpRpcClient({
       url: process.env.ARBITRUM_SEPOLIA_RPC_URL as string,
     }),
   },
+  logLevel: "trace",
 });
+
+async function handleTransferEvent(args: any) {
+  console.log("Transfer event:", args);
+}
 
 async function main(): Promise<void> {
   console.log("Hello, Pharo indexing folks!");
 
-  indexer.on("ERC20:Approval", async (args) => {
-    console.log("Approval event:", args);
+  indexer.on("PharoV2/PharoToken:Transfer", async (args) => {
+    await handleTransferEvent(args);
   });
 
-  indexer.on("ERC20:Transfer", async (args) => {
-    console.log("Approval event:", args);
-  });
-
-  // Subscribe to all events
-  indexer.on("event", async (args) => {
-    console.log("Event:", args);
-  });
+  // // Subscribe to all events
+  // indexer.on("event", async (args) => {
+  //   console.log("Event:", args);
+  // });
 
   // Subscribe to deployed contracts:
-  indexer.subscribeToContract({
-    contract: "ERC20" as const,
-    address: "0xB4204ecc047F026ABfC3B5794cFDBF7dAC7C4C9E",
+  for (const subscription of config.chains[0].subscriptions) {
+    indexer.subscribeToContract({
+      contract: subscription.contractName,
+      address: subscription.address,
+      fromBlock: BigInt(subscription.fromBlock!),
+      toBlock: "latest",
+    });
+  }
 
-    // Optional: Start from a specific block
-    fromBlock: 0n,
-    toBlock: "latest",
+  const fromBlock =
+    config.fromBlock === "latest"
+      ? await rpcClient.getLastBlockNumber()
+      : config.fromBlock;
+
+  for (const subscription of config.chains[0].subscriptions) {
+    const contractName = subscription.contractName;
+    const subscriptionFromBlock =
+      subscription.fromBlock === undefined
+        ? undefined
+        : BigInt(subscription.fromBlock);
+
+    indexer.subscribeToContract({
+      contract: contractName,
+      address: subscription.address,
+      fromBlock:
+        subscriptionFromBlock !== undefined && subscriptionFromBlock > fromBlock
+          ? subscriptionFromBlock
+          : fromBlock,
+    });
+  }
+
+  await indexer.indexToBlock(config.toBlock);
+
+  console.info({
+    msg: "caught up with blockchain events",
+    toBlock: config.toBlock,
+  });
+
+  catchupAndWatchChain({
+    ...config,
   });
 
   // -- One off indexing:
@@ -355,16 +397,8 @@ await main().catch((err) => {
   process.exit(1);
 });
 
-// async function catchupAndWatchChain(
-//   config: Omit<Config, "chains"> & {
-//     chainsauceCache: Cache | null;
-//     subscriptionStore: SubscriptionStore;
-//     priceProvider: PriceProvider;
-//     db: Database;
-//     chain: Chain;
-//     baseLogger: Logger;
-//   }
-// ) {
+async function catchupAndWatchChain(config: Omit<Config, "chains"> & {}) {}
+
 //   const chainLogger = config.baseLogger.child({
 //     chain: config.chain.id,
 //   });

@@ -18,4 +18,4 @@ const abis = {
 
 export default abis;
 export type ContractName = keyof typeof abis;
-export type ContractAbi = (typeof abis)[ContractName];
+// export type ContractAbi = typeof abis[ContractName];

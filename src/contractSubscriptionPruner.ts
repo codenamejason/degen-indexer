@@ -1,7 +1,7 @@
 import { RpcClient } from "chainsauce/dist/rpc.js";
 import { Logger } from "pino";
 import { ContractName } from "./indexer/abis/index.js";
-import { Indexer } from "./indexer/indexer.js";
+// import { Indexer } from "./indexer/indexer.js";
 
 const CONTRACT_EXPIRATION_IN_DAYS: Partial<Record<ContractName, number>> = {
   "PharoV2/PharoToken": 60,
@@ -9,14 +9,14 @@ const CONTRACT_EXPIRATION_IN_DAYS: Partial<Record<ContractName, number>> = {
 
 export class ContractSubscriptionPruner {
   #client: RpcClient;
-  #indexer: Indexer;
+  #indexer: any; //Indexer;
   #logger: Logger;
 
   #intervalMs = 10 * 60 * 1000; // 10 minutes
 
   #timer: NodeJS.Timeout | null = null;
 
-  constructor(opts: { client: RpcClient; indexer: Indexer; logger: Logger }) {
+  constructor(opts: { client: RpcClient; indexer: any; logger: Logger }) {
     this.#client = opts.client;
     this.#indexer = opts.indexer;
     this.#logger = opts.logger;

@@ -1,14 +1,15 @@
 import { CamelCasePlugin, Kysely, PostgresDialect, sql } from "kysely";
 import { Pool } from "pg";
 
-import { NewPolicy, PriceTable, UserTable } from "./schema.js";
+import { PriceTable, TNewPolicy, UserTable } from "./schema.js";
 
 import { LRUCache } from "lru-cache";
 import { Logger } from "pino";
 import { Address } from "../address.js";
 import { ChainId } from "../types.js";
+import { DataChange } from "./changeset.js";
 
-// export type { DataChange as Changeset };
+export type { DataChange as Changeset };
 
 interface Tables {
   users: UserTable;
@@ -17,13 +18,12 @@ interface Tables {
 
 type KyselyDb = Kysely<Tables>;
 
-const FLUSH_DONATION_BATCH_EVERY_MS = 5_000;
 const UPDATE_STATS_EVERY_MS = 60_000;
 
 export class Database {
   #db: KyselyDb;
   #roundMatchTokenCache = new LRUCache<string, Address>({ max: 500 });
-  #policyQueue: NewPolicy[] = [];
+  #policyQueue: TNewPolicy[] = [];
   #policyBatchTimeout: ReturnType<typeof setTimeout> | null = null;
   #statsTimeout: ReturnType<typeof setTimeout> | null = null;
 
@@ -53,7 +53,7 @@ export class Database {
 
     this.#policyBatchTimeout = setTimeout(() => {
       this.flushPolicyQueue();
-    }, FLUSH_DONATION_BATCH_EVERY_MS);
+    }, UPDATE_STATS_EVERY_MS);
   }
 
   private async flushPolicyQueue() {

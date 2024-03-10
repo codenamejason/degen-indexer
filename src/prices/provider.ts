@@ -3,13 +3,13 @@ import { Logger } from "pino";
 import { parseAddress } from "../address.js";
 import { Token, getChainConfigById } from "../config.js";
 import { Database } from "../database/index.js";
-import { Price } from "../database/schema.js";
+import { TPrice } from "../database/schema.js";
 import { convertFiatToToken, convertTokenToFiat } from "../tokenMath.js";
 import { Address, ChainId, FetchInterface } from "../types.js";
 import { fetchPricesForRange } from "./coinGecko.js";
 import { UnknownTokenError } from "./common.js";
 
-export type PriceWithDecimals = Omit<Price, "id"> & { tokenDecimals: number };
+export type PriceWithDecimals = Omit<TPrice, "id"> & { tokenDecimals: number };
 
 const FETCH_NEW_PRICE_EVERY_NTH_BLOCK_PER_CHAIN: Record<number, bigint> = {
   10: 7200n,
