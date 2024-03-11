@@ -1,16 +1,22 @@
-import { EventHandlerArgs, Indexer } from "chainsauce";
 import { randomUUID } from "crypto";
 import { parseAddress } from "../address.js";
 import { Changeset } from "../database/index.js";
 import { TPharoState } from "../types.js";
 
 export async function handleEvent(
-  args: EventHandlerArgs<Indexer>
+  args
 ): Promise<Changeset[]> {
   // todo: implement
   console.log("handleEvent", args.event.name, args.event.params);
 
-  const { chainId, event, subscribeToContract, readContract, getBlock } = args;
+  const {
+    chainId,
+    event,
+    subscribeToContract,
+    readContract,
+    getBlock,
+    // context: { rpcClient },
+  } = args;
 
   switch (args.event.name) {
     case "Transfer":
@@ -20,6 +26,8 @@ export async function handleEvent(
         value: string;
       };
 
+      // const tx = await rpcClient.getTransaction(event.transactionHash);
+
       return [
         {
           type: "InsertTransfer",
@@ -28,7 +36,7 @@ export async function handleEvent(
             from: parseAddress(transferParams.from),
             to: parseAddress(transferParams.to),
             amount: BigInt(transferParams.value),
-            transfered_at: BigInt(new Date().getTime()),
+            transfered_at: BigInt(event.transactionHash),
             block_number: BigInt(event.blockNumber),
           },
         },

@@ -1,5 +1,4 @@
-import { UUID } from "crypto";
-import { Generated, Insertable, Selectable, Updateable } from "kysely";
+import { Insertable, Selectable, Updateable } from "kysely";
 import { Address, ChainId, TPharoState, TUserRole } from "../types.js";
 
 export type User = {
@@ -10,70 +9,70 @@ export type User = {
 };
 
 export type UserTable = User & {
-  id: Generated<UUID>;
-  created_at: Date;
-  updated_at: Date;
+  id: string;
+  created_at: bigint;
+  updated_at: bigint;
 };
 
 export type Status = "ACTIVE" | "INACTIVE" | "CLOSED";
 
 export type CoverPolicy = {
-  creationDate: Date;
-  policyId: number;
+  creationDate: bigint;
+  policyId: bigint;
   owner: Address;
   status: Status;
   pharoId: number;
-  coverBought: number;
-  lengthOfCover: number;
-  reward: number;
-  premiumPaid: number;
-  premium: number;
-  rateEstimate: number;
-  minCover: number;
+  coverBought: bigint;
+  lengthOfCover: bigint;
+  reward: bigint;
+  premiumPaid: bigint;
+  premium: bigint;
+  rateEstimate: bigint;
+  minCover: bigint;
 };
 
 export type LiquidityProduct = {
   providerAddress: Address;
-  maximumRisk: number;
-  breakevenRate: number;
-  staked: number;
+  maximumRisk: bigint;
+  breakevenRate: bigint;
+  staked: bigint;
   asset: Address;
-  premiumCollected: number;
-  coverPaid: number;
-  coverAvailable: number;
-  reward: number;
-  rateEstimate: number;
+  premiumCollected: bigint;
+  coverPaid: bigint;
+  coverAvailable: bigint;
+  reward: bigint;
+  rateEstimate: bigint;
 };
 
 export type Obelisk = {
   timestamp: Date;
   pharoId: number;
   cb_wallet_id: Address[];
-  cb_policy_id: number[];
-  cb_preminum: number[];
-  cb_reward: number[];
-  cb_rate_estimate: number[];
-  cb_min_cover: number[];
-  cb_funds_avail: number[];
-  cb_cover_bought: number[];
-  cb_cover_mult: number[];
-  cb_percentile: number[];
+  cb_policy_id: bigint[];
+  cb_preminum: bigint[];
+  cb_reward: bigint[];
+  cb_rate_estimate: bigint[];
+  cb_min_cover: bigint[];
+  cb_funds_avail: bigint[];
+  cb_cover_bought: bigint[];
+  cb_cover_mult: bigint[];
+  cb_percentile: bigint[];
   cb_served_wallet_id: Address[][];
-  cb_served_product_id: number[][];
-  cb_served_value: number[][];
-  cb_incompatible_LPs: number[][];
+  cb_served_product_id: bigint[][];
+  cb_served_value: bigint[][];
+  cb_incompatible_LPs: bigint[][];
   lp_wallet_id: Address[];
-  lp_product_id: number[];
-  lp_stake: number[];
-  lp_reward: number[];
-  lp_rate_estimate: number[];
-  lp_max_risk: number[];
-  lp_cover_avail: number[];
-  lp_breakeven_rate: number[];
+  lp_product_id: bigint[];
+  lp_stake: bigint[];
+  lp_reward: bigint[];
+  lp_rate_estimate: bigint[];
+  lp_max_risk: bigint[];
+  lp_cover_avail: bigint[];
+  lp_breakeven_rate: bigint[];
   lp_served_wallet_id: Address[][];
-  lp_served_policy_id: number[][];
-  lp_served_value: number[][];
-  lp_incompatible_CBs: number[][];
+  lp_served_policy_id: bigint[][];
+  lp_served_value: bigint[][];
+  lp_incompatible_CBs: bigint[][];
 };
 
 export type ObeliskTable = Obelisk & {
@@ -92,7 +91,7 @@ export type LiquidityProductTable = LiquidityProduct & {
 };
 
 export type PriceTable = {
-  id: Generated<number>;
+  id: string;
   chainId: ChainId;
   tokenAddress: Address;
   priceInUsd: number;
@@ -119,9 +118,9 @@ export type WoSTable = WoS & {
 };
 
 export type SignedPosition = {
-  maxRisk: number;
-  stakeAmount: number;
-  rateEstimate: number;
+  maxRisk: bigint;
+  stakeAmount: bigint;
+  rateEstimate: bigint;
 };
 
 export type SignedPositionTable = SignedPosition & {
@@ -130,10 +129,10 @@ export type SignedPositionTable = SignedPosition & {
 };
 
 export type SignedPolicy = {
-  minCover: number;
-  premium: number;
-  rateEstimate: number;
-  lengthOfCover: number;
+  minCover: bigint;
+  premium: bigint;
+  rateEstimate: bigint;
+  lengthOfCover: bigint;
 };
 
 export type SignedPolicyTable = SignedPolicy & {
@@ -143,7 +142,7 @@ export type SignedPolicyTable = SignedPolicy & {
 
 export type UserRewards = {
   user: Address;
-  reward: number;
+  reward: bigint;
 };
 
 export type UserRewardsTable = UserRewards & {

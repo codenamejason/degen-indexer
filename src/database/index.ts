@@ -16,6 +16,7 @@ import { migrate } from "./migrate.js";
 import {
     LiquidityProductTable,
     ObeliskTable,
+    PharoTable,
     PolicyTable,
     PriceTable,
     RoleTable,
@@ -42,6 +43,7 @@ interface Tables {
   wos: WoSTable;
   transfers: TransferTable;
   roles: RoleTable;
+  pharos: PharoTable;
 }
 
 type KyselyDb = Kysely<Tables>;
@@ -163,7 +165,6 @@ export class Database {
           .insertInto("transfers")
           .values({
             ...change.transfer,
-            transfered_at: change.transfer.transfered_at,
           })
           .executeTakeFirst();
         break;
@@ -176,6 +177,16 @@ export class Database {
           })
           .executeTakeFirst();
         break;
+
+      case "InsertPharo":
+        await this.#db
+          .insertInto("pharos")
+          .values({
+            ...change.pharo,
+          })
+          .executeTakeFirst();
+        break;
+
       default:
         throw new Error(`unsupported change type: ${change.type}`);
     }
