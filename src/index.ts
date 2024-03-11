@@ -1,3 +1,4 @@
+import PgSimplifyInflectorPlugin from "@graphile-contrib/pg-simplify-inflector";
 import {
   Abi,
   createHttpRpcClient,
@@ -8,12 +9,14 @@ import { IndexerEvents } from "chainsauce/dist/indexer.js";
 import "dotenv/config";
 import * as pg from "pg";
 import { pino } from "pino";
+import { postgraphile } from "postgraphile";
+import ConnectionFilterPlugin from "postgraphile-plugin-connection-filter";
 import { throttle } from "throttle-debounce";
 import { Config, getConfig } from "./config.js";
 import { Changeset, Database } from "./database/index.js";
 import abis from "./indexer/abis/index.js";
 import { handleEvent } from "./indexer/handleEvent.js";
-const { Pool, types } = pg.default;
+const { Pool } = pg.default;
 
 // const { Pool, types } = pg.default;
 // const RESOURCE_MONITOR_INTERVAL_MS = 1 * 60 * 1000; // every minute
@@ -171,6 +174,59 @@ async function main(): Promise<void> {
   });
 
   indexer.watch();
+
+  async function catchupAndWatchChain(config: Omit<Config, "chains"> & {}) {}
+
+  // TODO: use read only connection, use separate pool?
+  const graphqlHandler = postgraphile(
+    databaseConnectionPool,
+    config.databaseSchemaName,
+    {
+      watchPg: false,
+      graphqlRoute: "/graphql",
+      graphiql: true,
+      graphiqlRoute: "/graphiql",
+      enhanceGraphiql: true,
+      disableDefaultMutations: true,
+      dynamicJson: true,
+      bodySizeLimit: "100kb", // response body limit
+      // disableQueryLog: false,
+      // allowExplain: (req) => {
+      //   return true;
+      // },
+      appendPlugins: [
+        PgSimplifyInflectorPlugin.default,
+        ConnectionFilterPlugin,
+      ],
+      legacyRelations: "omit",
+      setofFunctionsContainNulls: false,
+      exportGqlSchemaPath: "./schema.graphql",
+      simpleCollections: "only",
+      graphileBuildOptions: {
+        pgOmitListSuffix: true,
+        pgShortPk: true,
+        connectionFilterRelations: true,
+        connectionFilterUseListInflectors: true,
+        connectionFilterAllowedOperators: [
+          "isNull",
+          "equalTo",
+          "notEqualTo",
+          "lessThan",
+          "lessThanOrEqualTo",
+          "greaterThan",
+          "greaterThanOrEqualTo",
+          "in",
+          "notIn",
+          "contains",
+        ],
+      },
+
+      // TODO: buy pro version?
+      // defaultPaginationCap: 1000,
+      // readOnlyConnection: true,
+      // graphqlDepthLimit: 2
+    }
+  );
 }
 
 await main().catch((err) => {
@@ -178,4 +234,35 @@ await main().catch((err) => {
   process.exit(1);
 });
 
-async function catchupAndWatchChain(config: Omit<Config, "chains"> & {}) {}
+// const httpApi = createHttpApi({
+//   db,
+//   priceProvider,
+//   passportProvider: passportProvider,
+//   dataProvider: new CachedDataProvider({
+//     dataProvider: new DatabaseDataProvider(db),
+//     cache: new TTLCache({
+//       max: 10,
+//       ttl: 1000 * 60 * 1, // 1 minute
+//     }),
+//   }),
+//   port: config.apiHttpPort,
+//   logger: baseLogger.child({ subsystem: "HttpApi" }),
+//   buildTag: config.buildTag,
+//   chains: config.chains,
+//   hostname: config.hostname,
+//   graphqlHandler: graphqlHandler,
+//   enableSentry: config.sentryDsn !== null,
+//   calculator: {
+//     esimatesLinearQfImplementation:
+//       config.estimatesLinearQfWorkerPoolSize === null
+//         ? {
+//             type: "in-thread",
+//           }
+//         : {
+//             type: "worker-pool",
+//             workerPoolSize: config.estimatesLinearQfWorkerPoolSize,
+//           },
+//   },
+// });
+
+// await httpApi.start();
