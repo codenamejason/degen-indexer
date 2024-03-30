@@ -67,9 +67,9 @@ async function main(): Promise<void> {
   const indexer = createIndexer({
     contracts: abis as Record<string, Abi>,
     chain: {
-      id: 421614,
+      id: 666666666,
       rpcClient: createHttpRpcClient({
-        url: process.env.ARBITRUM_SEPOLIA_RPC_URL as string,
+        url: process.env.DEGEN_URL as string,
       }),
     },
     logLevel: "trace",

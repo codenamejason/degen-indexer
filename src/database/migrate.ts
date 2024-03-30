@@ -38,49 +38,6 @@ export async function migrate<T>(db: Kysely<T>, schemaName: string) {
     .execute();
 
   await schema
-    .createTable("wos")
-    .addColumn("id", "text")
-    .addColumn("blockNumber", BIGINT_TYPE)
-    .addColumn("pharoId", BIGINT_TYPE)
-    .addColumn("alpha", BIGINT_TYPE)
-    .addColumn("beta", BIGINT_TYPE)
-    .addColumn("rateProbable", BIGINT_TYPE)
-    .addColumn("minConfidence", BIGINT_TYPE)
-    .addColumn("maxConfidence", BIGINT_TYPE)
-    .addColumn("gof", BIGINT_TYPE)
-    .addColumn("gammaX", BIGINT_TYPE)
-    .addColumn("gammaY", BIGINT_TYPE)
-
-    .addPrimaryKeyConstraint("wos_pkey", ["id"])
-
-    .execute();
-
-  await schema
-    .createTable("signed_positions")
-    .addColumn("id", "text")
-    .addColumn("blockNumber", BIGINT_TYPE)
-    .addColumn("maxRisk", BIGINT_TYPE)
-    .addColumn("stakeAmount", BIGINT_TYPE)
-    .addColumn("rateEstimate", BIGINT_TYPE)
-
-    .addPrimaryKeyConstraint("signed_positions_pkey", ["id"])
-
-    .execute();
-
-  await schema
-    .createTable("signed_policies")
-    .addColumn("id", "text")
-    .addColumn("blockNumber", BIGINT_TYPE)
-    .addColumn("minCover", BIGINT_TYPE)
-    .addColumn("premium", BIGINT_TYPE)
-    .addColumn("rateEstimate", BIGINT_TYPE)
-    .addColumn("lengthOfCover", BIGINT_TYPE)
-
-    .addPrimaryKeyConstraint("signed_policies_pkey", ["id"])
-
-    .execute();
-
-  await schema
     .createTable("user_rewards")
     .addColumn("id", "text")
     .addColumn("chainId", CHAIN_ID_TYPE)
@@ -135,36 +92,6 @@ export async function migrate<T>(db: Kysely<T>, schemaName: string) {
     .addColumn("address", ADDRESS_TYPE)
 
     .addPrimaryKeyConstraint("contracts_pkey", ["id"])
-
-    .execute();
-
-  await schema
-    .createTable("pharos")
-    .addColumn("id", "text")
-    .addColumn("pharoId", BIGINT_TYPE)
-    .addColumn("name", "text")
-    .addColumn("description", "text")
-    .addColumn("lifetime", BIGINT_TYPE)
-    .addColumn("state", "text")
-    .addColumn("trueEventTime", BIGINT_TYPE)
-    .addColumn("birthdate", BIGINT_TYPE)
-    .addColumn("blockNumber", BIGINT_TYPE)
-    .addColumn("created_at", BIGINT_TYPE)
-
-    .addPrimaryKeyConstraint("pharos_pkey", ["id"])
-
-    .execute();
-
-  await schema
-    .createTable("lock_tokens")
-    .addColumn("id", "text")
-    .addColumn("blockNumber", BIGINT_TYPE)
-    .addColumn("user", ADDRESS_TYPE)
-    .addColumn("amount", BIGINT_TYPE)
-    .addColumn("validity", BIGINT_TYPE)
-    .addColumn("claimed", "boolean")
-
-    .addPrimaryKeyConstraint("lock_tokens_pkey", ["id"])
 
     .execute();
 }

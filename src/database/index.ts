@@ -14,19 +14,11 @@ import { ChainId } from "../types.js";
 import { DataChange } from "./changeset.js";
 import { migrate } from "./migrate.js";
 import {
-    LiquidityProductTable,
-    ObeliskTable,
-    PharoTable,
-    PolicyTable,
     PriceTable,
     RoleTable,
-    SignedPolicyTable,
-    SignedPositionTable,
-    TNewPolicy,
     TransferTable,
     UserRewardsTable,
     UserTable,
-    WoSTable,
 } from "./schema.js";
 
 export type { DataChange as Changeset };
@@ -34,16 +26,9 @@ export type { DataChange as Changeset };
 interface Tables {
   users: UserTable;
   prices: PriceTable;
-  obelisks: ObeliskTable;
-  policies: PolicyTable;
-  liquidityProducts: LiquidityProductTable;
-  signedPolicies: SignedPolicyTable;
-  signedPositions: SignedPositionTable;
   userRewards: UserRewardsTable;
-  wos: WoSTable;
   transfers: TransferTable;
   roles: RoleTable;
-  pharos: PharoTable;
 }
 
 type KyselyDb = Kysely<Tables>;
@@ -53,8 +38,6 @@ const UPDATE_STATS_EVERY_MS = 60_000;
 export class Database {
   #db: KyselyDb;
   #roundMatchTokenCache = new LRUCache<string, Address>({ max: 500 });
-  #policyQueue: TNewPolicy[] = [];
-  #policyBatchTimeout: ReturnType<typeof setTimeout> | null = null;
   #statsTimeout: ReturnType<typeof setTimeout> | null = null;
 
   readonly databaseSchemaName: string;
@@ -73,42 +56,42 @@ export class Database {
 
     this.databaseSchemaName = options.schemaName;
 
-    this.schedulePolicyQueueFlush();
+    // this.schedulePolicyQueueFlush();
   }
 
-  private schedulePolicyQueueFlush() {
-    if (this.#policyBatchTimeout !== null) {
-      clearTimeout(this.#policyBatchTimeout);
-    }
+  // private schedulePolicyQueueFlush() {
+  //   if (this.#policyBatchTimeout !== null) {
+  //     clearTimeout(this.#policyBatchTimeout);
+  //   }
 
-    this.#policyBatchTimeout = setTimeout(() => {
-      this.flushPolicyQueue();
-    }, UPDATE_STATS_EVERY_MS);
-  }
+  //   this.#policyBatchTimeout = setTimeout(() => {
+  //     this.flushPolicyQueue();
+  //   }, UPDATE_STATS_EVERY_MS);
+  // }
 
-  private async flushPolicyQueue() {
-    const policies = this.#policyQueue.splice(0, this.#policyQueue.length);
+  // private async flushPolicyQueue() {
+  //   const policies = this.#policyQueue.splice(0, this.#policyQueue.length);
 
-    if (policies.length === 0) {
-      return;
-    }
+  //   if (policies.length === 0) {
+  //     return;
+  //   }
 
-    // chunk policies into batches of 1k to void hitting the 65k parameter limit
-    // https://github.com/brianc/node-postgres/issues/1463
-    const chunkSize = 1_000;
-    const chunks = [];
+  //   // chunk policies into batches of 1k to void hitting the 65k parameter limit
+  //   // https://github.com/brianc/node-postgres/issues/1463
+  //   const chunkSize = 1_000;
+  //   const chunks = [];
 
-    for (let i = 0; i < policies.length; i += chunkSize) {
-      chunks.push(policies.slice(i, i + chunkSize));
-    }
+  //   for (let i = 0; i < policies.length; i += chunkSize) {
+  //     chunks.push(policies.slice(i, i + chunkSize));
+  //   }
 
-    for (const chunk of chunks) {
-      await this.applyChange({
-        type: "InsertManyDonations",
-        policies: chunk,
-      });
-    }
-  }
+  //   for (const chunk of chunks) {
+  //     await this.applyChange({
+  //       type: "InsertManyDonations",
+  //       policies: chunk,
+  //     });
+  //   }
+  // }
 
   async dropSchemaIfExists() {
     await this.#db.schema
@@ -165,24 +148,6 @@ export class Database {
           .insertInto("transfers")
           .values({
             ...change.transfer,
-          })
-          .executeTakeFirst();
-        break;
-
-      case "InsertRole":
-        await this.#db
-          .insertInto("roles")
-          .values({
-            ...change.role,
-          })
-          .executeTakeFirst();
-        break;
-
-      case "InsertPharo":
-        await this.#db
-          .insertInto("pharos")
-          .values({
-            ...change.pharo,
           })
           .executeTakeFirst();
         break;

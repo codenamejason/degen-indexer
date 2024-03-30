@@ -1,13 +1,5 @@
 export { Address } from "./address.js";
 
-export enum EPharoState {
-  MUMMY,
-  PHARO,
-  IMHOTEP,
-  ANUBIS,
-  OBELISK,
-}
-
 export enum EUserRole {
   ADMIN,
   COVER_BUYER,
@@ -24,6 +16,3 @@ export type FetchInterface = (
   uri: string,
   opts?: FetchOptions
 ) => Promise<Response>;
-
-export type TUserRole = keyof typeof EUserRole;
-export type TPharoState = keyof typeof EPharoState;
