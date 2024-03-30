@@ -65,6 +65,11 @@ const CHAINS: Chain[] = [
       //   address: "",
       //   fromBlock: 400000,
       // },
+      {
+        contractName: "DegenPepe",
+        address: "0x2B3006D34359F3C23429167a659b18cC9c6F8bcA",
+        fromBlock: 400000,
+      }
     ],
   },
   {
