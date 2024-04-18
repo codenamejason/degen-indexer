@@ -62,14 +62,49 @@ const CHAINS: Chain[] = [
     subscriptions: [
       // {
       //   contractName: "DegenToken",
-      //   address: "",
+      //   address: "0x0000000000000000000000000000000000000000",
       //   fromBlock: 400000,
       // },
       {
         contractName: "DegenPepe",
         address: "0x2B3006D34359F3C23429167a659b18cC9c6F8bcA",
-        fromBlock: 400000,
-      }
+        fromBlock: 7039881,
+      },
+      // {
+      //   contractName: "PharoV2/PharoToken",
+      //   address: "0x",
+      //   fromBlock: 0,
+      // },
+      // {
+      //   contractName: "PharoV2/PharoReservePool",
+      //   address: "0x",
+      //   fromBlock: 0,
+      // },
+      // {
+      //   contractName: "PharoV2/PharoRiskPool",
+      //   address: "0x",
+      //   fromBlock: 0,
+      // },
+      // {
+      //   contractName: "PharoV2/PharoPhinance",
+      //   address: "0x",
+      //   fromBlock: 0,
+      // },
+      // {
+      //   contractName: "PharoV2/PharoCover",
+      //   address: "0x",
+      //   fromBlock: 0,
+      // },
+      // {
+      //   contractName: "PharoV2/PharoMarket",
+      //   address: "0x",
+      //   fromBlock: 0,
+      // },
+      // {
+      //   contractName: "PharoV2/PharoRewards",
+      //   address: "0x",
+      //   fromBlock: 0,
+      // },
     ],
   },
   {

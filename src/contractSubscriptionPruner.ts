@@ -4,7 +4,7 @@ import { ContractName } from "./indexer/abis/index.js";
 // import { Indexer } from "./indexer/indexer.js";
 
 const CONTRACT_EXPIRATION_IN_DAYS: Partial<Record<ContractName, number>> = {
-  "PharoV2/PharoToken": 60,
+  "DegenPepe": 60,
 };
 
 export class ContractSubscriptionPruner {
