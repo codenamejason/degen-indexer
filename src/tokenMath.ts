@@ -13,7 +13,7 @@ export function convertTokenToFiat(args: {
 }): number {
   const priceDecimalFactor = Math.pow(10, args.tokenPriceDecimals);
   const fixedPointPrice = BigInt(
-    Math.trunc(args.tokenPrice * priceDecimalFactor)
+    Math.trunc(args.tokenPrice * priceDecimalFactor),
   );
 
   const tokenDecimalFactor = 10n ** BigInt(args.tokenDecimals);
@@ -44,7 +44,7 @@ export function convertFiatToToken(args: {
   const priceDecimalFactor = Math.pow(10, args.tokenPriceDecimals);
 
   const fiatAmountBigInt = BigInt(
-    Math.trunc((args.fiatAmount / args.tokenPrice) * priceDecimalFactor)
+    Math.trunc((args.fiatAmount / args.tokenPrice) * priceDecimalFactor),
   );
 
   const tokenDecimalFactor = 10n ** BigInt(args.tokenDecimals);

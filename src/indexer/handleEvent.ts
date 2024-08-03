@@ -24,6 +24,7 @@ export async function handleEvent(args: any): Promise<Changeset[]> {
       };
 
       // const tx = await rpcClient.getTransaction(event.transactionHash);
+      console.log("transferParams", transferParams);
 
       return [
         {

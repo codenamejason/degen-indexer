@@ -5,42 +5,10 @@ import os from "node:os";
 import path from "node:path";
 import { parseArgs } from "node:util";
 import { z } from "zod";
-import abis from "./indexer/abis/index.js";
-import { Hex } from "./types.js";
+import { Chain, ChainId } from "./types.js";
 
-type ChainId = number;
-type CoingeckoSupportedChainId = 1 | 8453;
-
-const CHAIN_DATA_VERSION = "33";
-
-export type Token = {
-  code: string;
-  address: string;
-  decimals: number;
-  priceSource: { chainId: CoingeckoSupportedChainId; address: string };
-  voteAmountCap?: bigint;
-};
-
-export type Subscription = {
-  address: Hex;
-  contractName: keyof typeof abis;
-  fromBlock?: number;
-  eventsRenames?: Record<string, string>;
-};
-
-export type Chain = {
-  rpc: string;
-  name: string;
-  id: ChainId;
-  pricesFromTimestamp: number;
-  tokens: Token[];
-  subscriptions: Subscription[];
-  maxGetLogsRange?: number;
-};
-
+const CHAIN_DATA_VERSION = "34";
 const rpcUrl = z.string().url();
-
-export type baseLogger = Logger;
 
 const CHAINS: Chain[] = [
   {
@@ -65,11 +33,11 @@ const CHAINS: Chain[] = [
       //   address: "0x0000000000000000000000000000000000000000",
       //   fromBlock: 400000,
       // },
-      {
-        contractName: "DegenPepe",
-        address: "0x2B3006D34359F3C23429167a659b18cC9c6F8bcA",
-        fromBlock: 7039881,
-      },
+      // {
+      //   contractName: "DegenPepe",
+      //   address: "0x2B3006D34359F3C23429167a659b18cC9c6F8bcA",
+      //   fromBlock: 7039881,
+      // },
       // {
       //   contractName: "PharoV2/PharoToken",
       //   address: "0x",
@@ -105,6 +73,16 @@ const CHAINS: Chain[] = [
       //   address: "0x",
       //   fromBlock: 0,
       // },
+      {
+        contractName: "AlloV2/Registry/V1",
+        address: "0x4AAcca72145e1dF2aeC137E1f3C5E3D75DB8b5f3",
+        fromBlock: 15924900,
+      },
+      {
+        contractName: "AlloV2/Allo/V1",
+        address: "0xB087535DB0df98fC4327136e897A5985E5Cfbd66",
+        fromBlock: 15924900,
+      },
     ],
   },
   {
@@ -169,7 +147,7 @@ const CHAINS: Chain[] = [
 
 export const getDecimalsForToken = (
   chainId: ChainId,
-  tokenAddress: string
+  tokenAddress: string,
 ): number => {
   const chain = CHAINS.find((c) => c.id === chainId);
   if (chain === undefined) {
@@ -177,11 +155,11 @@ export const getDecimalsForToken = (
   }
 
   const token = chain.tokens.find(
-    (t) => t.address.toLowerCase() === tokenAddress.toLowerCase()
+    (t) => t.address.toLowerCase() === tokenAddress.toLowerCase(),
   );
   if (token === undefined) {
     throw new Error(
-      `No such token: ${tokenAddress} configured for chain ${chainId}`
+      `No such token: ${tokenAddress} configured for chain ${chainId}`,
     );
   }
 

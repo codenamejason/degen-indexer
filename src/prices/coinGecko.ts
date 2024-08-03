@@ -79,7 +79,7 @@ export async function fetchPricesForRange({
 
       if (res.status === 429) {
         throw new Error(
-          `CoinGecko API rate limit exceeded, are you using an API key?`
+          `CoinGecko API rate limit exceeded, are you using an API key?`,
         );
       }
 
@@ -88,20 +88,20 @@ export async function fetchPricesForRange({
     {
       retries: 4,
       minTimeout: 4000,
-    }
+    },
   );
 
   if ("error" in responseBody) {
     throw new Error(
-      `Error from CoinGecko API: ${JSON.stringify(responseBody)}`
+      `Error from CoinGecko API: ${JSON.stringify(responseBody)}`,
     );
   }
 
   if ("status" in responseBody) {
     throw new Error(
       `Error from CoinGecko API: ${JSON.stringify(
-        responseBody.status.error_message
-      )}`
+        responseBody.status.error_message,
+      )}`,
     );
   }
 

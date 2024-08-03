@@ -24,12 +24,12 @@ export async function convertFromUSD(
   chainId: number,
   token: Address,
   amountInUSD: number,
-  blockNumber: bigint | "latest"
+  blockNumber: bigint | "latest",
 ): Promise<{ amount: bigint; price: number }> {
   const closestPrice = await priceProvider.getUSDConversionRate(
     chainId,
     token,
-    blockNumber
+    blockNumber,
   );
 
   return {
@@ -48,12 +48,12 @@ export async function convertToUSD(
   chainId: number,
   token: Address,
   amount: bigint,
-  blockNumber: bigint | "latest"
+  blockNumber: bigint | "latest",
 ): Promise<{ amount: number; price: number }> {
   const closestPrice = await priceProvider.getUSDConversionRate(
     chainId,
     token,
-    blockNumber
+    blockNumber,
   );
 
   return {
@@ -74,7 +74,7 @@ interface PriceProviderConfig {
   coingeckoApiUrl: string;
   getBlockTimestampInMs: (
     chainId: ChainId,
-    blockNumber: bigint
+    blockNumber: bigint,
   ) => Promise<number>;
   fetch: FetchInterface;
 }
@@ -83,12 +83,12 @@ export interface PriceProvider {
   getUSDConversionRate: (
     chainId: ChainId,
     tokenAddress: Address,
-    blockNumber: bigint | "latest"
+    blockNumber: bigint | "latest",
   ) => Promise<PriceWithDecimals>;
 }
 
 export function createPriceProvider(
-  config: PriceProviderConfig
+  config: PriceProviderConfig,
 ): PriceProvider {
   const { db, logger } = config;
   const cache = new LRUCache<string, Promise<PriceWithDecimals>>({
@@ -100,12 +100,12 @@ export function createPriceProvider(
   async function getUSDConversionRate(
     chainId: number,
     tokenAddress: Address,
-    blockNumber: bigint | "latest"
+    blockNumber: bigint | "latest",
   ): Promise<PriceWithDecimals> {
     const chain = getChainConfigById(chainId);
 
     const token = chain.tokens.find(
-      (t) => t.address.toLowerCase() === tokenAddress.toLowerCase()
+      (t) => t.address.toLowerCase() === tokenAddress.toLowerCase(),
     );
     if (token === undefined) {
       throw new UnknownTokenError(tokenAddress, chainId);
@@ -115,7 +115,7 @@ export function createPriceProvider(
       const priceWithoutDecimals = await db.getTokenPriceByBlockNumber(
         chainId,
         tokenAddress,
-        blockNumber
+        blockNumber,
       );
 
       if (priceWithoutDecimals !== null) {
@@ -126,7 +126,7 @@ export function createPriceProvider(
       }
 
       throw new Error(
-        `Price not found for token ${tokenAddress} on chain ${chainId} and block ${blockNumber}`
+        `Price not found for token ${tokenAddress} on chain ${chainId} and block ${blockNumber}`,
       );
     }
 
@@ -147,11 +147,11 @@ export function createPriceProvider(
     const pricePromise = fetchPriceForToken(
       chainId,
       token,
-      roundedBlockNumber
+      roundedBlockNumber,
     ).then((price) => {
       if (price === null) {
         throw new Error(
-          `Price not found for token ${tokenAddress} on chain ${chainId} and block ${blockNumber}`
+          `Price not found for token ${tokenAddress} on chain ${chainId} and block ${blockNumber}`,
         );
       } else {
         return price;
@@ -168,11 +168,11 @@ export function createPriceProvider(
   async function fetchPriceForToken(
     chainId: ChainId,
     token: Token,
-    blockNumber: bigint
+    blockNumber: bigint,
   ): Promise<PriceWithDecimals | null> {
     const blockTimestampInMs = await config.getBlockTimestampInMs(
       chainId,
-      blockNumber
+      blockNumber,
     );
 
     // sometimes coingecko returns no prices for 1 hour range, 2 hours works better

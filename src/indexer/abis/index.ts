@@ -10,6 +10,8 @@ import PharoPhinance from "./pharo/PharoPhinance.js";
 import PharoReservePool from "./pharo/PharoReservePool.js";
 import PharoRewards from "./pharo/PharoRewards.js";
 import PharoRiskPool from "./pharo/PharoRiskPool.js";
+import { abi as Allo } from "./allo/allo.js";
+import { abi as Registry } from "./allo/registry.js";
 
 // Add your abi's here like this: "myAbi": myAbi,
 const abis = {
@@ -21,6 +23,8 @@ const abis = {
   "PharoV2/PharoCover": PharoCover,
   "PharoV2/PharoMarket": PharoMarket,
   "PharoV2/PharoRewards": PharoRewards,
+  "AlloV2/Registry/V1": Registry,
+  "AlloV2/Allo/V1": Allo,
 } as const;
 
 export default abis;

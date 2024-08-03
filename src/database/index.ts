@@ -1,9 +1,9 @@
 import {
-    CamelCasePlugin,
-    Kysely,
-    PostgresDialect,
-    ValueExpression,
-    sql,
+  CamelCasePlugin,
+  Kysely,
+  PostgresDialect,
+  ValueExpression,
+  sql,
 } from "kysely";
 import { LRUCache } from "lru-cache";
 import { Pool } from "pg";
@@ -14,11 +14,11 @@ import { ChainId } from "../types.js";
 import { DataChange } from "./changeset.js";
 import { migrate } from "./migrate.js";
 import {
-    PriceTable,
-    RoleTable,
-    TransferTable,
-    UserRewardsTable,
-    UserTable,
+  PriceTable,
+  RoleTable,
+  TransferTable,
+  UserRewardsTable,
+  UserTable,
 } from "./schema.js";
 
 export type { DataChange as Changeset };
@@ -160,7 +160,7 @@ export class Database {
   async getTokenPriceByBlockNumber(
     chainId: ChainId,
     tokenAddress: Address,
-    blockNumber: bigint | "latest"
+    blockNumber: bigint | "latest",
   ) {
     let priceQuery = this.#db
       .selectFrom("prices")

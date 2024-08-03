@@ -4,7 +4,7 @@ import { ContractName } from "./indexer/abis/index.js";
 // import { Indexer } from "./indexer/indexer.js";
 
 const CONTRACT_EXPIRATION_IN_DAYS: Partial<Record<ContractName, number>> = {
-  "DegenPepe": 60,
+  DegenPepe: 60,
 };
 
 export class ContractSubscriptionPruner {
@@ -68,7 +68,7 @@ export class ContractSubscriptionPruner {
         const fromBlockDate = new Date(fromBlock.timestamp * 1000);
 
         const expirationDate = new Date(
-          fromBlockDate.getTime() + expirationInDays * 24 * 60 * 60 * 1000
+          fromBlockDate.getTime() + expirationInDays * 24 * 60 * 60 * 1000,
         );
 
         const now = new Date();

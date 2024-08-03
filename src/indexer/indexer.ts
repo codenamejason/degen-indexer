@@ -4,7 +4,6 @@ import { Abi, PublicClient } from "viem";
 import { Database } from "../database/index.js";
 import { PriceProvider } from "../prices/provider.js";
 
-
 export interface EventHandlerContext {
   chainId: number;
   db: Database;
@@ -14,4 +13,7 @@ export interface EventHandlerContext {
   logger: Logger;
 }
 
-export type Indexer = ChainsauceIndexer<Record<string, Abi>, EventHandlerContext>;
+export type Indexer = ChainsauceIndexer<
+  Record<string, Abi>,
+  EventHandlerContext
+>;

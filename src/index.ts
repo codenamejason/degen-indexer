@@ -142,10 +142,10 @@ async function main(): Promise<void> {
         });
 
         console.info(
-          `${currentBlock}/${targetBlock} indexed (${progressPercentage}%) (pending events: ${pendingEventsCount}) (contracts: ${activeSubscriptions.length})`
+          `${currentBlock}/${targetBlock} indexed (${progressPercentage}%) (pending events: ${pendingEventsCount}) (contracts: ${activeSubscriptions.length})`,
         );
-      }
-    )
+      },
+    ),
   );
 
   await indexer.indexToBlock(config.toBlock);
@@ -225,7 +225,7 @@ async function main(): Promise<void> {
       // defaultPaginationCap: 1000,
       // readOnlyConnection: true,
       // graphqlDepthLimit: 2
-    }
+    },
   );
 }
 
